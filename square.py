@@ -6,6 +6,7 @@ class square:
         self.area = 10
 
     def is_dividable(self):
+        # The cell falls when the counter is dividable by 5
         if self.counter % 5 == 0:
             return True
         return False
