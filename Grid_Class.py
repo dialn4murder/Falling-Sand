@@ -4,7 +4,7 @@ import square
 
 class Grid_Class:
     def __init__(self, width, height):
-        # efines the width and height of the application
+        # Defines the width and height of the application
         self.width = width
         self.height = height
         # Defines an empty and white square based on the square class
