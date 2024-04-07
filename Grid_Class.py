@@ -1,3 +1,5 @@
+
+import math
 import pygame
 import square
 
@@ -10,6 +12,7 @@ class Grid_Class:
         # Defines an empty and white square based on the square class
         self.empty_square = square.square(0, (0, 0, 0))
         self.white_square = square.square(1, (255, 255, 255))
+        self.red_square = square.square(2,(255,0,0))
         # Calculates the maximum width / height of the grid based on application size and area of the squares
         self.column = self.width // self.empty_square.area
         self.row = self.height // self.empty_square.area
@@ -33,10 +36,10 @@ class Grid_Class:
                                         self.white_square.area - 1, self.white_square.area - 1)
                 # Draws the square based on the squares colour value
                 pygame.draw.rect(screen, cell_val.colour, cell_rect)
-                # If its a white square
-                if cell_val.square_id == 1:
+                # If any square other than black
+                if cell_val.square_id != 0:
                     # Makes sure the squares won't go out of bounds
-                    if row < self.row-1:
+                    if (row < self.row-1) and (column < self.column - 1):
                         # Calls check fall makes sure it has an empty cell below the cell
                         self.check_fall(row, column)
 
@@ -55,5 +58,32 @@ class Grid_Class:
             # Checks if the counter is dividable
             if self.grid[row][column].is_dividable():
                 # Swaps cells
-                self.grid[row][column] = self.empty_square
-                self.grid[row + 1][column] = self.white_square
+                self.swap_cell(row, column, row + 1, column)
+
+        elif self.grid[row+1][column+1] == self.empty_square and self.grid[row + 1][column] == self.white_square:
+            # Adds to the counter which slows the animation
+            self.grid[row][column].counter += 1
+            # Checks if the counter is dividable
+            if self.grid[row][column].is_dividable():
+                # Swaps cells
+                self.swap_cell(row, column, row + 1, column + 1)
+
+        elif self.grid[row+1][column-1] == self.empty_square and self.grid[row + 1][column] == self.white_square:
+            # Adds to the counter which slows the animation
+            self.grid[row][column].counter += 1
+            # Checks if the counter is dividable
+            if self.grid[row][column].is_dividable():
+                # Swaps cells
+                self.swap_cell(row, column, row+1, column-1)
+
+    def swap_cell(self, row, column, new_row, new_column):
+        # Swaps cells
+        self.grid[new_row][new_column] = self.white_square
+        self.grid[row][column] = self.empty_square
+
+    def terrain_generator(self, rate, height, start_pos):
+        for x in range(self.column):
+            top_layer = round(math.sin(x/rate)*height+start_pos)
+            # Sets everything below the sine wave to white squares
+            for y in range(top_layer,self.row):
+                self.grid[y][x] = self.white_square

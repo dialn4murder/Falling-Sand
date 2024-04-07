@@ -1,9 +1,9 @@
-import pygame
 import Grid_Class
+import pygame
 
 # Typical pygame boilerplate
 pygame.init()
-screen_width = 720
+screen_width = 1980
 screen_height = 1000
 screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
@@ -11,6 +11,7 @@ running = True
 
 # Calls the grid class which creates the grid and draws onto the grid
 game_grid = Grid_Class.Grid_Class(screen_width, screen_height)
+game_grid.terrain_generator(10,10,screen_height/15)
 
 while running:
 
